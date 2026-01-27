@@ -92,8 +92,6 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleFirstInteraction = () => {
       if (currentPage !== AppState.INTRO && !musicStarted) setMusicStarted(true);
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
     };
     window.addEventListener('click', handleFirstInteraction);
     window.addEventListener('touchstart', handleFirstInteraction);
@@ -131,7 +129,7 @@ const App: React.FC = () => {
   const showDecorativeElements = currentPage !== AppState.INTRO;
 
   return (
-    <div className={`relative w-full h-screen overflow-hidden font-serif selection:bg-pink-200 selection:text-wine-900 ${currentPage === AppState.INTRO ? 'bg-white' : 'bg-[#0d0002]'}`}>
+    <div className={`relative w-full h-[100dvh] overflow-hidden font-serif selection:bg-pink-200 selection:text-wine-900 ${currentPage === AppState.INTRO ? 'bg-white' : 'bg-[#0d0002]'}`}>
       <BackgroundMusic active={musicStarted} currentPage={currentPage} />
       {showDecorativeElements && (
         <>
