@@ -15,12 +15,7 @@ const BackgroundMusic: React.FC<Props> = ({ active, currentPage }) => {
   // Volume Hierarchy Mapping
   const getTargetVolume = (state: AppState) => {
     switch (state) {
-      case AppState.LANDING: return 0.20;
-      case AppState.JOURNEY: return 0.20;
-      case AppState.WHISPERS: return 0.14;
-      case AppState.INTERLUDE: return 0.12;
-      case AppState.TIMELINE: return 0.18;
-      case AppState.KIKI: return 0.14;
+      case AppState.PROPOSE_DAY: return 0.20;
       case AppState.FINAL: return 0.08;
       default: return 0.20;
     }
@@ -52,11 +47,11 @@ const BackgroundMusic: React.FC<Props> = ({ active, currentPage }) => {
 
   useEffect(() => {
     if (active && audioRef.current && audioRef.current.paused) {
-      // Intimate cinematic track: slow piano with ambient pads
+      // Intimate cinematic track
       audioRef.current.src = "https://www.chosic.com/wp-content/uploads/2021/07/Sweet-And-Serene.mp3";
       audioRef.current.volume = 0;
       audioRef.current.play().catch(e => console.log("Autoplay blocked", e));
-      fadeTo(getTargetVolume(currentPage), 4000); // Cinematic 4s fade-in during tunnel
+      fadeTo(getTargetVolume(currentPage), 4000);
     }
   }, [active]);
 
@@ -66,16 +61,11 @@ const BackgroundMusic: React.FC<Props> = ({ active, currentPage }) => {
     }
   }, [currentPage]);
 
-  // Handle specialized intimate pauses (e.g. "Wrong" in Interlude, "Vows" in Final)
   useEffect(() => {
     const handleSilence = (e: any) => {
       const duration = e.detail?.duration || 1000;
       const targetVol = getTargetVolume(currentPage);
-      
-      // Dip to zero
       fadeTo(0, 300);
-      
-      // Resume after duration
       setTimeout(() => {
         fadeTo(targetVol, 1500);
       }, duration + 300);

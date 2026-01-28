@@ -20,15 +20,15 @@ const Interlude: React.FC<Props> = ({ onNext }) => {
   const [syncPhase, setSyncPhase] = useState(0);
   const [exitChoice, setExitChoice] = useState<string | null>(null);
 
-  // Sync Phase Timers
+  // Sync Phase Timers - Significantly slower pacing
   useEffect(() => {
     if (step === InterludeStep.SYNC) {
       const timers = [
-        setTimeout(() => setSyncPhase(1), 4000),   // "Bring phone closer"
-        setTimeout(() => setSyncPhase(2), 8000),   // "Breathe"
-        setTimeout(() => setSyncPhase(3), 13000),  // "That quiet feeling?"
-        setTimeout(() => setSyncPhase(4), 18000),  // "That's us..."
-        setTimeout(() => setSyncPhase(5), 23000),  // Button fades in
+        setTimeout(() => setSyncPhase(1), 6000),   // "Bring phone closer"
+        setTimeout(() => setSyncPhase(2), 12000),  // "Breathe"
+        setTimeout(() => setSyncPhase(3), 19000),  // "That quiet feeling?"
+        setTimeout(() => setSyncPhase(4), 26000),  // "That's us..."
+        setTimeout(() => setSyncPhase(5), 32000),  // Button fades in
       ];
       return () => timers.forEach(t => clearTimeout(t));
     }
@@ -36,20 +36,20 @@ const Interlude: React.FC<Props> = ({ onNext }) => {
 
   const handleTouch = () => {
     setTouched(true);
-    setTimeout(() => setStep(InterludeStep.CHOICE), 3500);
+    setTimeout(() => setStep(InterludeStep.CHOICE), 4500); // More pause after touch
   };
 
   const handleChoice = () => {
     setChoiceMade(true);
     // Dispatched silence event for 1s pause before "Wrong." appears
-    window.dispatchEvent(new CustomEvent('app-audio-silence', { detail: { duration: 1000 } }));
-    setTimeout(() => setStep(InterludeStep.SYNC), 5000);
+    window.dispatchEvent(new CustomEvent('app-audio-silence', { detail: { duration: 1500 } }));
+    setTimeout(() => setStep(InterludeStep.SYNC), 6000); // Linger on the "Wrong" response
   };
 
   const handleExit = (choice: string) => {
     setExitChoice(choice);
     if (choice === 'leave') {
-      setTimeout(() => setExitChoice('stay'), 3000);
+      setTimeout(() => setExitChoice('stay'), 4000);
     }
   };
 
@@ -109,9 +109,9 @@ const Interlude: React.FC<Props> = ({ onNext }) => {
         {step === InterludeStep.SYNC && (
           <motion.div key="sync" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center">
             {/* Heartbeat pulse glow */}
-            <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 0.8, repeat: Infinity }} className="fixed inset-0 bg-[#800020] pointer-events-none" />
+            <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 1.0, repeat: Infinity }} className="fixed inset-0 bg-[#800020] pointer-events-none" />
             <AnimatePresence mode="wait">
-              <motion.p key={syncPhase} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 1 }} className="text-3xl md:text-5xl font-cursive text-pink-100 italic">
+              <motion.p key={syncPhase} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 1.5 }} className="text-3xl md:text-5xl font-cursive text-pink-100 italic">
                 {syncPhase === 0 && "Don't rush."}
                 {syncPhase === 1 && "Bring the phone closer."}
                 {syncPhase === 2 && "Breathe."}
@@ -122,7 +122,7 @@ const Interlude: React.FC<Props> = ({ onNext }) => {
             </AnimatePresence>
             {syncPhase === 5 && (
               <motion.button
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setStep(InterludeStep.EXIT)}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} onClick={() => setStep(InterludeStep.EXIT)}
                 className="mt-20 px-12 py-5 bg-[#f6c1cc] text-[#800020] rounded-full font-sans tracking-[0.4em] text-[10px] uppercase"
               >
                 I felt that.
@@ -151,7 +151,7 @@ const Interlude: React.FC<Props> = ({ onNext }) => {
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center">
                 <p className="text-3xl font-cursive text-pink-300 mb-12">Good choice.</p>
                 <h3 className="text-4xl md:text-6xl font-cursive text-pink-100 mb-16">Now come... the story continues.</h3>
-                <motion.button onClick={onNext} whileHover={{ scale: 1.05 }} className="px-16 py-6 bg-gradient-to-r from-[#800020] to-[#be185d] text-white rounded-full font-sans tracking-[0.6em] text-[10px] uppercase shadow-2xl">Continue ❤️</motion.button>
+                <motion.button onClick={onNext} whileHover={{ scale: 1.05 }} transition={{ delay: 3, duration: 1.5 }} className="px-16 py-6 bg-gradient-to-r from-[#800020] to-[#be185d] text-white rounded-full font-sans tracking-[0.6em] text-[10px] uppercase shadow-2xl">Continue ❤️</motion.button>
               </motion.div>
             )}
           </motion.div>

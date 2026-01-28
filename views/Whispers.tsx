@@ -84,7 +84,7 @@ const Whispers: React.FC<Props> = ({ onNext }) => {
           <AnimatePresence>
             {allOpened && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                <p className="text-xl font-cursive italic text-pink-100/80 mb-8 px-4">“Now you’ve heard them all… my heart is fully yours.”</p>
+                <p className="text-xl font-cursive italic text-pink-100/80 mb-8 px-4">Now you’ve heard them all… my heart is fully yours.</p>
                 <motion.button 
                   onClick={onNext} 
                   whileTap={{ scale: 0.95 }}
